@@ -1,7 +1,7 @@
 // app/api/sneakers/[id]/market/route.ts
 
 import { NextRequest, NextResponse } from "next/server";
-import { supabase } from "@/lib/supabase";
+import { supabaseAdmin } from "@/lib/supabase-admin";
 import {
   getEbayErrorMessage,
   isEbayRateLimitError,
