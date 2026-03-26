@@ -1,16 +1,7 @@
 import { NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
+import { supabaseAdmin } from "@/lib/supabase-admin";
 
-const supabaseAdmin = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!,
-  {
-    auth: {
-      persistSession: false,
-      autoRefreshToken: false,
-    },
-  }
-);
+export const runtime = "nodejs";
 
 export async function DELETE(
   _request: Request,
@@ -19,23 +10,44 @@ export async function DELETE(
   try {
     const { id } = await context.params;
 
-    const { error } = await supabaseAdmin
+    console.log("DELETE grail id received:", id);
+
+    const { data, error } = await supabaseAdmin
       .from("grails")
       .delete()
-      .eq("id", id);
+      .eq("id", id)
+      .select("id");
 
     if (error) {
+      console.error("Delete grail error:", error);
+
       return NextResponse.json(
-        { ok: false, error: error.message },
+        { success: false, error: error.message },
         { status: 500 }
       );
     }
 
-    return NextResponse.json({ ok: true });
+    if (!data || data.length === 0) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Grail not found",
+          id,
+        },
+        { status: 404 }
+      );
+    }
+
+    return NextResponse.json({
+      success: true,
+      deletedGrail: data[0],
+    });
   } catch (error) {
+    console.error("Unexpected delete grail error:", error);
+
     return NextResponse.json(
       {
-        ok: false,
+        success: false,
         error: error instanceof Error ? error.message : "Delete failed",
       },
       { status: 500 }

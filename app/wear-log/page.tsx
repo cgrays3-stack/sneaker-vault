@@ -142,7 +142,7 @@ export default async function WearLogPage() {
                         ) : null}
                       </div>
 
-                      <DeleteWearLogButton wearLogId={log.id} />
+                      <DeleteWearLogButton wearLogId={wearLog.id} />
                     </div>
                   </div>
                 );
