@@ -30,7 +30,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const { data, error } = await supabaseAdminAdmin
+    const { data, error } = await supabaseAdmin
       .from("wear_logs")
       .insert({
         sneaker_id: sneakerId,
