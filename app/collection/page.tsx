@@ -7,6 +7,8 @@ import { getSneakers } from "../../lib/data";
 import LogWearButton from "../../components/log-wear-button";
 import { formatDateOnly } from "../../lib/format-date";
 
+export const dynamic = "force-dynamic";
+
 export default async function CollectionPage() {
   const sneakers = await getSneakers();
 

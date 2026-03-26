@@ -5,6 +5,8 @@ import GrailsClient from "./page-client";
 import { GrailCandidatePicker } from "@/components/grail-candidate-picker";
 import type { Grail } from "../../lib/types";
 
+export const dynamic = "force-dynamic";
+
 export default async function GrailsPage() {
   const { data, error } = await supabase
     .from("grails")

@@ -4,6 +4,8 @@ import DeleteWearLogButton from "../../components/delete-wear-log-button";
 import WearEntryForm from "../../components/wear-entry-form";
 import { supabase } from "../../lib/supabase";
 
+export const dynamic = "force-dynamic";
+
 type WearLogRow = {
   id: string;
   sneaker_id: string;
