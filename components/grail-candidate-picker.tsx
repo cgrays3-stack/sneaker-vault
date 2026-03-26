@@ -188,10 +188,10 @@ export function GrailCandidatePicker({ existingGrails }: Props) {
 }
 
   return (
-    <section className="rounded-3xl bg-white p-5 shadow-sm">
+    <section className="rounded-3xl bg-white p-5 text-neutral-900 shadow-sm">
       <div className="mb-4">
-        <h2 className="text-xl font-semibold">Add Grail</h2>
-        <p className="mt-1 text-sm text-neutral-600">
+        <h2 className="text-xl font-semibold text-neutral-900">Add Grail</h2>
+        <p className="mt-1 text-sm text-neutral-700">
           Search with whatever you know. Pick the right shoe, then the app will
           save a richer grail record and pull sold comps.
         </p>
@@ -203,7 +203,7 @@ export function GrailCandidatePicker({ existingGrails }: Props) {
           value={query}
           onChange={(event) => setQuery(event.target.value)}
           placeholder="Search by nickname, SKU, model, or brand"
-          className="min-w-0 flex-1 rounded-2xl border border-neutral-200 px-4 py-3 text-sm outline-none ring-0 transition focus:border-neutral-400"
+          className="min-w-0 flex-1 rounded-2xl border border-neutral-200 px-4 py-3 text-sm text-neutral-900 placeholder:text-neutral-500 outline-none ring-0 transition focus:border-neutral-400"
         />
         <button
           type="submit"
@@ -221,7 +221,7 @@ export function GrailCandidatePicker({ existingGrails }: Props) {
       ) : null}
 
       {emptyStateText ? (
-        <div className="mt-4 rounded-2xl border border-dashed border-neutral-200 px-4 py-6 text-sm text-neutral-500">
+        <div className="mt-4 rounded-2xl border border-dashed border-neutral-200 px-4 py-6 text-sm text-neutral-700">
           {emptyStateText}
         </div>
       ) : null}

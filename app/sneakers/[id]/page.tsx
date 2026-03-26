@@ -128,7 +128,7 @@ export default async function SneakerDetailPage({
     return (
       <>
         <AppHeader />
-        <section className="rounded-3xl bg-white p-5 shadow-sm">
+        <section className="rounded-3xl bg-white p-5 shadow-sm text-neutral-900">
           Sneaker not found.
         </section>
         <BottomNav />
@@ -145,7 +145,7 @@ export default async function SneakerDetailPage({
     <>
       <AppHeader />
 
-      <section className="rounded-3xl bg-white p-5 shadow-sm">
+      <section className="rounded-3xl bg-white p-5 shadow-sm text-neutral-900">
         <div className="flex h-72 items-center justify-center overflow-hidden rounded-3xl bg-slate-50 text-slate-500">
           {hero?.image_url ? (
             <img

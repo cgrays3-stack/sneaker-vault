@@ -74,7 +74,7 @@ export default async function HomePage() {
       <>
         <AppHeader />
 
-        <section className="rounded-3xl bg-white p-5 shadow-sm">
+        <section className="rounded-3xl bg-white p-5 shadow-sm text-neutral-900">
           <div className="mb-4 flex items-center justify-between">
             <h2 className="text-xl font-semibold">Dashboard</h2>
           </div>
@@ -111,7 +111,7 @@ export default async function HomePage() {
     <>
       <AppHeader />
 
-      <section className="rounded-3xl bg-white p-5 shadow-sm">
+      <section className="rounded-3xl bg-white p-5 shadow-sm text-neutral-900">
         <div className="mb-4 flex items-center justify-between">
           <h2 className="text-xl font-semibold">Dashboard</h2>
         </div>

@@ -22,7 +22,7 @@ export default async function GrailsPage() {
       <div className="space-y-4">
         <GrailCandidatePicker existingGrails={grails} />
 
-        <section className="rounded-3xl bg-white p-5 shadow-sm">
+        <section className="rounded-3xl bg-white p-5 shadow-sm text-neutral-900">
           <div className="mb-4">
             <h2 className="text-2xl font-semibold">Grail Wishlist</h2>
             <p className="text-sm text-slate-500">

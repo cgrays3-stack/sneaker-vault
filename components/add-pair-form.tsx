@@ -550,7 +550,7 @@ export default function AddPairForm() {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      <section className="rounded-3xl bg-white p-5 shadow-sm">
+      <section className="rounded-3xl bg-white p-5 shadow-sm text-neutral-900">
         <div className="mb-4">
           <h2 className="text-xl font-semibold text-neutral-900">Add Pair</h2>
           <p className="mt-1 text-sm text-neutral-700">
@@ -878,7 +878,7 @@ export default function AddPairForm() {
         </div>
       </section>
 
-      <section className="rounded-3xl bg-white p-5 shadow-sm">
+      <section className="rounded-3xl bg-white p-5 shadow-sm text-neutral-900">
         <div className="mb-4">
           <h2 className="text-xl font-semibold text-neutral-900">Photos</h2>
           <p className="mt-1 text-sm text-neutral-700">

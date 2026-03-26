@@ -94,7 +94,7 @@ export default async function WearLogPage() {
       <div className="space-y-4">
         <WearEntryForm sneakers={sneakers} />
 
-        <section className="rounded-3xl bg-white p-5 shadow-sm">
+        <section className="rounded-3xl bg-white p-5 shadow-sm text-neutral-900">
           <div className="mb-4 flex items-center justify-between">
             <h2 className="text-xl font-semibold">Wear Log</h2>
             <p className="text-sm text-slate-500">{wearLogs.length} entries</p>

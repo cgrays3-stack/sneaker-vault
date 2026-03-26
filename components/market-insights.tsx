@@ -99,7 +99,7 @@ export function MarketInsights({ sneakerId }: MarketInsightsProps) {
 
   if (isLoading) {
     return (
-      <section className="rounded-3xl bg-white p-5 shadow-sm">
+      <section className="rounded-3xl bg-white p-5 shadow-sm text-neutral-900">
         <div className="mb-4 flex items-center justify-between">
           <div>
             <h2 className="text-lg font-semibold text-zinc-900">Market estimate</h2>
@@ -133,7 +133,7 @@ export function MarketInsights({ sneakerId }: MarketInsightsProps) {
 
   if (!data || !data.success) {
     return (
-      <section className="rounded-3xl bg-white p-5 shadow-sm">
+      <section className="rounded-3xl bg-white p-5 shadow-sm text-neutral-900">
         <div className="mb-2">
           <h2 className="text-lg font-semibold text-zinc-900">Market estimate</h2>
           <p className="text-sm text-zinc-500">Active listing pricing from eBay</p>
@@ -149,7 +149,7 @@ export function MarketInsights({ sneakerId }: MarketInsightsProps) {
   const isEmpty = data.compCount === 0;
 
   return (
-    <section className="rounded-3xl bg-white p-5 shadow-sm">
+    <section className="rounded-3xl bg-white p-5 shadow-sm text-neutral-900">
       <div className="mb-4 flex items-start justify-between gap-3">
         <div>
           <h2 className="text-lg font-semibold text-zinc-900">Market estimate</h2>

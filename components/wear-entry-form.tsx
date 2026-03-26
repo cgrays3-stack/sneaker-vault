@@ -78,7 +78,7 @@ export default function WearEntryForm({ sneakers }: WearEntryFormProps) {
   }
 
   return (
-    <section className="rounded-3xl bg-white p-5 shadow-sm">
+    <section className="rounded-3xl bg-white p-5 shadow-sm text-neutral-900">
       <div className="mb-4">
         <h2 className="text-xl font-semibold">Log Wear</h2>
         <p className="mt-1 text-sm text-slate-500">
