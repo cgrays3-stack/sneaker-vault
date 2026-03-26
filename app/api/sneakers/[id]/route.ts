@@ -88,7 +88,7 @@ export async function PATCH(request: Request, context: RouteContext) {
       box_condition: normalizeBoxCondition(body.box_condition),
     };
 
-    const { error } = await supabase
+    const { error } = await supabaseAdmin
       .from("sneakers")
       .update(updatePayload)
       .eq("id", id);

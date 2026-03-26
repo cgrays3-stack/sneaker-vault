@@ -10,7 +10,7 @@ export async function GET(
   try {
     const { id } = await context.params;
 
-    const { data, error } = await supabaseAdmin
+    const { data, error } = await supabaseAdminAdmin
       .from("wear_logs")
       .select("id, sneaker_id, wear_date, notes, created_at")
       .eq("id", id)
@@ -57,7 +57,7 @@ export async function DELETE(
   try {
     const { id } = await context.params;
 
-    const { data, error } = await supabaseAdmin
+    const { data, error } = await supabaseAdminAdmin
       .from("wear_logs")
       .delete()
       .eq("id", id)

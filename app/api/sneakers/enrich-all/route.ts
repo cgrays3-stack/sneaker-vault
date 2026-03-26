@@ -48,7 +48,7 @@ function buildMissingFieldUpdates(shoe: SneakerRow) {
 
 export async function POST() {
   try {
-    const { data: sneakers, error } = await supabase
+    const { data: sneakers, error } = await supabaseAdmin
       .from("sneakers")
       .select("id, brand, model, official_product_name, common_nickname, colorway, sku");
 
@@ -76,7 +76,7 @@ export async function POST() {
         continue;
       }
 
-      const { error: updateError } = await supabase
+      const { error: updateError } = await supabaseAdmin
         .from("sneakers")
         .update(updates)
         .eq("id", shoe.id);

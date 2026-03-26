@@ -21,7 +21,7 @@ export async function POST(
       );
     }
 
-    const { error } = await supabase
+    const { error } = await supabaseAdmin
       .from("sneakers")
       .update({
         estimated_value_low: null,

@@ -45,7 +45,7 @@ export async function GET(_request: NextRequest, context: RouteContext) {
       );
     }
 
-    const { data: sneaker, error } = await supabase
+    const { data: sneaker, error } = await supabaseAdmin
       .from("sneakers")
       .select(
         `

@@ -71,7 +71,7 @@ function hasEnoughDataToSearch(input: {
 }
 
 export async function GET() {
-  const { data, error } = await supabase
+  const { data, error } = await supabaseAdmin
     .from("grails")
     .select("*")
     .order("priority", { ascending: false, nullsFirst: false })
@@ -116,7 +116,7 @@ export async function POST(request: Request) {
       status: "active",
     };
 
-    const { data: grail, error } = await supabase
+    const { data: grail, error } = await supabaseAdmin
       .from("grails")
       .insert(insertPayload)
       .select("*")
@@ -154,7 +154,7 @@ export async function POST(request: Request) {
           commonNickname: grail.common_nickname ?? null,
         });
 
-        const { data: pricedGrail, error: updateError } = await supabase
+        const { data: pricedGrail, error: updateError } = await supabaseAdmin
           .from("grails")
           .update({
             used_sold_price_low: pricing.used.prices.low,

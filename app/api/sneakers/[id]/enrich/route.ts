@@ -10,7 +10,7 @@ export async function POST(_request: NextRequest, context: RouteContext) {
   try {
     const { id } = await context.params;
 
-    const { data: sneaker, error } = await supabase
+    const { data: sneaker, error } = await supabaseAdmin
       .from("sneakers")
       .select(`
         *,
@@ -68,7 +68,7 @@ export async function POST(_request: NextRequest, context: RouteContext) {
       });
     }
 
-    const { data: updatedSneaker, error: updateError } = await supabase
+    const { data: updatedSneaker, error: updateError } = await supabaseAdmin
       .from("sneakers")
       .update(updates)
       .eq("id", id)

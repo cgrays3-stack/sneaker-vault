@@ -45,7 +45,7 @@ export async function POST(request: Request) {
     const sku = candidate.inferred.sku ?? null;
 
     if (sku) {
-      const { data: existingBySku } = await supabase
+      const { data: existingBySku } = await supabaseAdmin
         .from("grails")
         .select("*")
         .eq("status", "active")
@@ -67,7 +67,7 @@ export async function POST(request: Request) {
     }
 
     if (!sku && officialProductName) {
-      const { data: existingByName } = await supabase
+      const { data: existingByName } = await supabaseAdmin
         .from("grails")
         .select("*")
         .eq("status", "active")
@@ -116,7 +116,7 @@ export async function POST(request: Request) {
       status: "active",
     };
 
-    const { data: grail, error: insertError } = await supabase
+    const { data: grail, error: insertError } = await supabaseAdmin
       .from("grails")
       .insert(insertPayload)
       .select("*")
@@ -147,7 +147,7 @@ export async function POST(request: Request) {
         commonNickname: grail.common_nickname ?? null,
       });
 
-      const { data: pricedGrail, error: updateError } = await supabase
+      const { data: pricedGrail, error: updateError } = await supabaseAdmin
         .from("grails")
         .update({
           used_sold_price_low: pricing.used.prices.low,

@@ -38,7 +38,7 @@ export async function POST(_request: Request, context: RouteContext) {
   try {
     const { id } = await context.params;
 
-    const { data: grail, error } = await supabase
+    const { data: grail, error } = await supabaseAdmin
       .from("grails")
       .select(
         `
@@ -84,7 +84,7 @@ export async function POST(_request: Request, context: RouteContext) {
         commonNickname: grail.common_nickname ?? null,
       });
 
-      const { data: updatedGrail, error: updateError } = await supabase
+      const { data: updatedGrail, error: updateError } = await supabaseAdmin
         .from("grails")
         .update({
           used_sold_price_low: pricing.used.prices.low,

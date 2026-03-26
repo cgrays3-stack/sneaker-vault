@@ -27,7 +27,7 @@ function hasEnoughDataToSearch(shoe: SneakerRow): boolean {
 
 export async function POST() {
   try {
-    const { data: sneakers, error } = await supabase
+    const { data: sneakers, error } = await supabaseAdmin
       .from("sneakers")
       .select(
         `
@@ -99,7 +99,7 @@ export async function POST() {
           continue;
         }
 
-        const { error: updateError } = await supabase
+        const { error: updateError } = await supabaseAdmin
           .from("sneakers")
           .update({
             estimated_value_low: estimate.prices.low,

@@ -35,7 +35,7 @@ export async function POST(_request: Request, context: RouteContext) {
   try {
     const { id } = await context.params;
 
-    const { data: shoe, error } = await supabase
+    const { data: shoe, error } = await supabaseAdmin
       .from("sneakers")
       .select(
         `
@@ -91,7 +91,7 @@ export async function POST(_request: Request, context: RouteContext) {
       });
     }
 
-    const { error: updateError } = await supabase
+    const { error: updateError } = await supabaseAdmin
       .from("sneakers")
       .update({
         estimated_value_low: estimate.prices.low,

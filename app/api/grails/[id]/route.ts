@@ -12,7 +12,7 @@ export async function DELETE(
 
     console.log("DELETE grail id received:", id);
 
-    const { data, error } = await supabaseAdmin
+    const { data, error } = await supabaseAdminAdmin
       .from("grails")
       .delete()
       .eq("id", id)

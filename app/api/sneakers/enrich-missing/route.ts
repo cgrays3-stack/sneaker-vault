@@ -14,7 +14,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const { data: sneaker, error } = await supabase
+    const { data: sneaker, error } = await supabaseAdmin
       .from("sneakers")
       .select(`
         *,
@@ -43,7 +43,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const { data: updatedSneaker, error: updateError } = await supabase
+    const { data: updatedSneaker, error: updateError } = await supabaseAdmin
       .from("sneakers")
       .update(result.updates)
       .eq("id", id)
