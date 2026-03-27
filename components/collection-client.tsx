@@ -1,8 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { supabase } from "@/lib/supabase";
 import SneakerCard from "@/components/sneaker-card";
 
 type Sneaker = {
@@ -21,18 +20,16 @@ type CollectionClientProps = {
   initialSneakers: Sneaker[];
 };
 
-function extractStoragePathFromPublicUrl(url: string) {
-  const marker = "/storage/v1/object/public/sneaker-photos/";
-  const index = url.indexOf(marker);
-  if (index === -1) return null;
-  return url.slice(index + marker.length);
-}
+type DeleteResponse = {
+  success: boolean;
+  error?: string;
+};
 
 export default function CollectionClient({
   initialSneakers,
 }: CollectionClientProps) {
   const router = useRouter();
-  const [sneakers, setSneakers] = useState(initialSneakers);
+  const [isPending, startTransition] = useTransition();
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -47,62 +44,33 @@ export default function CollectionClient({
     setDeletingId(sneakerId);
 
     try {
-      const { data: photoRows, error: photosReadError } = await supabase
-        .from("sneaker_photos")
-        .select("id, image_url")
-        .eq("sneaker_id", sneakerId);
+      const response = await fetch(`/api/sneakers/${sneakerId}`, {
+        method: "DELETE",
+      });
 
-      if (photosReadError) {
-        throw photosReadError;
+      const contentType = response.headers.get("content-type") || "";
+      const isJson = contentType.includes("application/json");
+
+      if (!isJson) {
+        const text = await response.text();
+        console.error("Delete sneaker route returned non-JSON:", text);
+        throw new Error("Delete route returned HTML instead of JSON");
       }
 
-      const storagePaths =
-        photoRows
-          ?.map((row) => extractStoragePathFromPublicUrl(row.image_url))
-          .filter((value): value is string => Boolean(value)) ?? [];
+      const json = (await response.json()) as DeleteResponse;
 
-      if (storagePaths.length > 0) {
-        const { error: storageDeleteError } = await supabase.storage
-          .from("sneaker-photos")
-          .remove(storagePaths);
-
-        if (storageDeleteError) {
-          console.warn("Storage delete warning:", storageDeleteError);
-        }
+      if (!response.ok || !json.success) {
+        throw new Error(json.error || "Failed to delete sneaker");
       }
 
-      const { error: photoDeleteError } = await supabase
-        .from("sneaker_photos")
-        .delete()
-        .eq("sneaker_id", sneakerId);
-
-      if (photoDeleteError) {
-        throw photoDeleteError;
-      }
-
-      const { error: wearLogDeleteError } = await supabase
-        .from("wear_logs")
-        .delete()
-        .eq("sneaker_id", sneakerId);
-
-      if (wearLogDeleteError) {
-        throw wearLogDeleteError;
-      }
-
-      const { error: sneakerDeleteError } = await supabase
-        .from("sneakers")
-        .delete()
-        .eq("id", sneakerId);
-
-      if (sneakerDeleteError) {
-        throw sneakerDeleteError;
-      }
-
-      setSneakers((prev) => prev.filter((sneaker) => sneaker.id !== sneakerId));
-      router.refresh();
+      startTransition(() => {
+        router.refresh();
+      });
     } catch (err) {
       console.error(err);
-      setError(err instanceof Error ? err.message : "Failed to delete sneaker.");
+      setError(
+        err instanceof Error ? err.message : "Failed to delete sneaker."
+      );
     } finally {
       setDeletingId(null);
     }
@@ -117,12 +85,12 @@ export default function CollectionClient({
       )}
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {sneakers.map((sneaker) => (
+        {initialSneakers.map((sneaker) => (
           <SneakerCard
             key={sneaker.id}
             sneaker={sneaker}
             onDelete={handleDeleteSneaker}
-            isDeleting={deletingId === sneaker.id}
+            isDeleting={deletingId === sneaker.id || isPending}
           />
         ))}
       </div>
