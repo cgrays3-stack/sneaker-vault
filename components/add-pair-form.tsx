@@ -3,7 +3,7 @@
 import { ChangeEvent, FormEvent, RefObject, useEffect, useRef, useState } from "react";
 import imageCompression from "browser-image-compression";
 import { useRouter } from "next/navigation";
-import { supabase } from "@/lib/supabase";
+
 
 type FormState = {
   nickname: string;
@@ -396,9 +396,7 @@ if (!response.ok || !data.success) {
 
 const sneakerId = data.sneaker.id;
 
-      if (sneakerError) {
-        throw sneakerError;
-      }
+
 
       if (!sneaker?.id) {
         throw new Error("Sneaker was created but no id was returned.");
