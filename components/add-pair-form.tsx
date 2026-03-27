@@ -3,7 +3,7 @@
 import { ChangeEvent, FormEvent, RefObject, useEffect, useRef, useState } from "react";
 import imageCompression from "browser-image-compression";
 import { useRouter } from "next/navigation";
-
+import { supabase } from "@/lib/supabase";
 
 type FormState = {
   nickname: string;
