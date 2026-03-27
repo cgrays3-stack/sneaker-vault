@@ -398,9 +398,7 @@ const sneakerId = data.sneaker.id;
 
 
 
-      if (!sneaker?.id) {
-        throw new Error("Sneaker was created but no id was returned.");
-      }
+     
 
       if (shoePhoto.compressedFile) {
         await uploadPhotoAndReturnUrl(sneaker.id, "shoe", shoePhoto, true);
