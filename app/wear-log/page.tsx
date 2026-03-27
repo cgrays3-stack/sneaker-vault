@@ -43,7 +43,8 @@ async function getWearLogs(): Promise<WearLogRow[]> {
         )
       )
     `)
-    .order("wear_date", { ascending: false });
+    .order("wear_date", { ascending: false })
+    .order("id", { ascending: false });
 
   if (error || !data) {
     console.error("Error loading wear logs:", error);
@@ -65,7 +66,8 @@ async function getSneakerOptions(): Promise<SneakerOption[]> {
   const { data, error } = await supabase
     .from("sneakers")
     .select("id, nickname")
-    .order("nickname", { ascending: true });
+    .order("nickname", { ascending: true })
+    .order("id", { ascending: true });
 
   if (error) {
     console.error("Error loading sneakers for wear form:", error);
@@ -98,12 +100,12 @@ export default async function WearLogPage() {
 
         <section className="rounded-3xl bg-white p-5 shadow-sm text-neutral-900">
           <div className="mb-4 flex items-center justify-between">
-            <h2 className="text-xl font-semibold">Wear Log</h2>
-            <p className="text-sm text-slate-500">{wearLogs.length} entries</p>
+            <h2 className="text-xl font-semibold text-neutral-900">Wear Log</h2>
+            <p className="text-sm text-slate-600">{wearLogs.length} entries</p>
           </div>
 
           {wearLogs.length === 0 ? (
-            <div className="rounded-2xl bg-slate-50 p-6 text-slate-500">
+            <div className="rounded-2xl bg-slate-50 p-6 text-slate-600">
               No wear logs yet.
             </div>
           ) : (

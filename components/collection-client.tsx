@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import SneakerCard from "@/components/sneaker-card";
 
@@ -30,8 +30,13 @@ export default function CollectionClient({
 }: CollectionClientProps) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
+  const [sneakers, setSneakers] = useState(initialSneakers);
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    setSneakers(initialSneakers);
+  }, [initialSneakers]);
 
   async function handleDeleteSneaker(sneakerId: string) {
     const confirmed = window.confirm(
@@ -85,7 +90,7 @@ export default function CollectionClient({
       )}
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {initialSneakers.map((sneaker) => (
+        {sneakers.map((sneaker) => (
           <SneakerCard
             key={sneaker.id}
             sneaker={sneaker}

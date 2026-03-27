@@ -1,6 +1,7 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
 import type { Grail } from "@/lib/types";
 
 type Props = {
@@ -8,30 +9,37 @@ type Props = {
 };
 
 type RefreshResponse = {
-  ok?: boolean;
-  updated?: boolean;
+  success?: boolean;
   error?: string;
   pricingWarning?: string | null;
   grail?: Grail;
 };
 
 type DeleteResponse = {
-  ok?: boolean;
+  success?: boolean;
   error?: string;
 };
 
 type ResolveImageResponse = {
-  ok?: boolean;
+  success?: boolean;
   error?: string;
   grail?: Grail;
 };
 
 export default function GrailsClient({ initialGrails }: Props) {
+  const router = useRouter();
+  const [isPending, startTransition] = useTransition();
+
   const [grails, setGrails] = useState<Grail[]>(initialGrails);
   const [refreshingId, setRefreshingId] = useState<string | null>(null);
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [resolvingImageId, setResolvingImageId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+
+  // 🔥 CRITICAL FIX: sync with server data after router.refresh()
+  useEffect(() => {
+    setGrails(initialGrails);
+  }, [initialGrails]);
 
   const sortedGrails = useMemo(() => {
     return [...grails].sort((a, b) => {
@@ -80,17 +88,18 @@ export default function GrailsClient({ initialGrails }: Props) {
 
       if (data.grail) {
         setGrails((current) =>
-          current.map((g) => (g.id === id ? data.grail! : g)),
+          current.map((g) => (g.id === id ? data.grail! : g))
         );
-        return;
       }
 
       if (data.pricingWarning) {
         setError(data.pricingWarning);
-        return;
       }
 
-      setError("Refresh completed, but no updated pricing was returned.");
+      // 🔥 ensure full sync with server truth
+      startTransition(() => {
+        router.refresh();
+      });
     } catch (err) {
       setError(err instanceof Error ? err.message : "Refresh failed.");
     } finally {
@@ -109,11 +118,14 @@ export default function GrailsClient({ initialGrails }: Props) {
 
       const data = (await response.json()) as DeleteResponse;
 
-      if (!response.ok || !data.ok) {
+      if (!response.ok || !data.success) {
         throw new Error(data.error || "Failed to delete grail.");
       }
 
-      setGrails((current) => current.filter((grail) => grail.id !== id));
+      // 🔥 DO NOT rely on local state only
+      startTransition(() => {
+        router.refresh();
+      });
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to delete grail.");
     } finally {
@@ -132,13 +144,18 @@ export default function GrailsClient({ initialGrails }: Props) {
 
       const data = (await response.json()) as ResolveImageResponse;
 
-      if (!response.ok || !data.ok || !data.grail) {
+      if (!response.ok || !data.success || !data.grail) {
         throw new Error(data.error || "Image search failed.");
       }
 
       setGrails((current) =>
-        current.map((g) => (g.id === id ? data.grail! : g)),
+        current.map((g) => (g.id === id ? data.grail! : g))
       );
+
+      // 🔥 ensure sync
+      startTransition(() => {
+        router.refresh();
+      });
     } catch (err) {
       setError(err instanceof Error ? err.message : "Image search failed.");
     } finally {
@@ -197,7 +214,6 @@ export default function GrailsClient({ initialGrails }: Props) {
                     type="button"
                     onClick={() => handleRefresh(grail.id)}
                     disabled={isRefreshing}
-                    title="Refresh pricing"
                     className="disabled:opacity-50"
                   >
                     {isRefreshing ? "…" : "🔄"}
@@ -207,7 +223,6 @@ export default function GrailsClient({ initialGrails }: Props) {
                     type="button"
                     onClick={() => handleResolveImage(grail.id)}
                     disabled={isResolvingImage}
-                    title="Resolve image"
                     className="disabled:opacity-50"
                   >
                     {isResolvingImage ? "…" : "🖼"}
@@ -216,8 +231,7 @@ export default function GrailsClient({ initialGrails }: Props) {
                   <button
                     type="button"
                     onClick={() => handleDelete(grail.id)}
-                    disabled={isDeleting}
-                    title="Delete grail"
+                    disabled={isDeleting || isPending}
                     className="disabled:opacity-50"
                   >
                     {isDeleting ? "…" : "❌"}
