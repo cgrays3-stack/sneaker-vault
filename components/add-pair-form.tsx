@@ -394,22 +394,22 @@ if (!response.ok || !data.success) {
   throw new Error(data.error || "Failed to create sneaker.");
 }
 
-const sneakerId = data.sneaker.id;
+const sneakerId = data.sneakerid;
 
 
 
      
 
       if (shoePhoto.compressedFile) {
-        await uploadPhotoAndReturnUrl(sneaker.id, "shoe", shoePhoto, true);
+        await uploadPhotoAndReturnUrl(sneakerid, "shoe", shoePhoto, true);
       }
 
       if (boxPhoto.compressedFile) {
-        await uploadPhotoAndReturnUrl(sneaker.id, "box", boxPhoto, false);
+        await uploadPhotoAndReturnUrl(sneakerid, "box", boxPhoto, false);
       }
 
       if (labelPhoto.compressedFile) {
-        await uploadPhotoAndReturnUrl(sneaker.id, "label", labelPhoto, false);
+        await uploadPhotoAndReturnUrl(sneakerid, "label", labelPhoto, false);
       }
 
       setSuccessMessage("Pair added successfully.");
