@@ -1,7 +1,8 @@
-import { supabase } from "./supabase";
+import "server-only";
+import { supabaseAdmin } from "./supabase-admin";
 
 export async function getSneakers() {
-  const { data, error } = await supabase
+  const { data, error } = await supabaseAdmin
     .from("sneakers")
     .select(`
       id,

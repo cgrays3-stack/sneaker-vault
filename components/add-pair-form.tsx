@@ -1,6 +1,13 @@
 "use client";
 
-import { ChangeEvent, FormEvent, RefObject, useEffect, useRef, useState } from "react";
+import {
+  ChangeEvent,
+  FormEvent,
+  RefObject,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import imageCompression from "browser-image-compression";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
@@ -296,10 +303,10 @@ export default function AddPairForm() {
 
     const imageUrl = publicData.publicUrl;
 
-    setLabelPhoto({
-      ...labelPhoto,
+    setLabelPhoto((prev) => ({
+      ...prev,
       uploadedUrl: imageUrl,
-    });
+    }));
 
     return imageUrl;
   }
@@ -380,25 +387,27 @@ export default function AddPairForm() {
         notes: form.notes || null,
       };
 
-    const response = await fetch("/api/sneakers", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json",
-  },
-  body: JSON.stringify(sneakerPayload),
-});
+      const response = await fetch("/api/sneakers", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(sneakerPayload),
+      });
 
-const data = await response.json();
+      const data = await response.json();
 
-if (!response.ok || !data.success) {
-  throw new Error(data.error || "Failed to create sneaker.");
-}
+      if (!response.ok || !data.success) {
+        throw new Error(data.error || "Failed to create sneaker.");
+      }
 
-const sneakerId = data.sneakerId;
+      const sneakerId = data.sneaker?.id ?? data.sneakerId;
 
-
-
-     
+      if (!sneakerId) {
+        throw new Error(
+          "Create sneaker succeeded but no sneaker id was returned."
+        );
+      }
 
       if (shoePhoto.compressedFile) {
         await uploadPhotoAndReturnUrl(sneakerId, "shoe", shoePhoto, true);
@@ -426,7 +435,7 @@ const sneakerId = data.sneakerId;
       setLabelPhoto({ ...emptyPhotoState });
 
       router.push("/collection");
-    
+      router.refresh();
     } catch (err) {
       console.error(err);
       setError(err instanceof Error ? err.message : "Failed to save sneaker.");
@@ -482,7 +491,9 @@ const sneakerId = data.sneakerId;
               <button
                 type="button"
                 onClick={handleReadBoxLabel}
-                disabled={!photo.compressedFile || photo.isCompressing || isParsingLabel}
+                disabled={
+                  !photo.compressedFile || photo.isCompressing || isParsingLabel
+                }
                 className="rounded-2xl border border-neutral-300 bg-white px-4 py-3 text-sm font-medium text-neutral-900 transition hover:bg-neutral-50 disabled:cursor-not-allowed disabled:opacity-50"
               >
                 {isParsingLabel ? "Reading Label..." : "Read Box Label"}
@@ -912,7 +923,8 @@ const sneakerId = data.sneakerId;
 
           {renderPhotoUploader({
             title: "Label Photo",
-            description: "Optional size tag / SKU label photo. Use Read Box Label to auto-fill fields.",
+            description:
+              "Optional size tag / SKU label photo. Use Read Box Label to auto-fill fields.",
             kind: "label",
             cameraRef: labelCameraInputRef,
             libraryRef: labelLibraryInputRef,
