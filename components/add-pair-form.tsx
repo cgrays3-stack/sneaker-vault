@@ -380,11 +380,21 @@ export default function AddPairForm() {
         notes: form.notes || null,
       };
 
-      const { data: sneaker, error: sneakerError } = await supabase
-        .from("sneakers")
-        .insert(sneakerPayload)
-        .select("id")
-        .single();
+    const response = await fetch("/api/sneakers", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+  },
+  body: JSON.stringify(sneakerPayload),
+});
+
+const data = await response.json();
+
+if (!response.ok || !data.success) {
+  throw new Error(data.error || "Failed to create sneaker.");
+}
+
+const sneakerId = data.sneaker.id;
 
       if (sneakerError) {
         throw sneakerError;
@@ -420,7 +430,7 @@ export default function AddPairForm() {
       setLabelPhoto({ ...emptyPhotoState });
 
       router.push("/collection");
-      router.refresh();
+    
     } catch (err) {
       console.error(err);
       setError(err instanceof Error ? err.message : "Failed to save sneaker.");
