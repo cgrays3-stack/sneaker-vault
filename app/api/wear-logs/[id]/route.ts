@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 
 export const runtime = "nodejs";
@@ -73,10 +74,14 @@ export async function DELETE(
         {
           success: false,
           error: "Wear log not found",
+          id,
         },
         { status: 404 }
       );
     }
+
+    revalidatePath("/wear-log");
+    revalidatePath("/collection");
 
     return NextResponse.json({
       success: true,

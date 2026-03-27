@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 import {
   getEbayErrorMessage,
@@ -66,7 +67,7 @@ function hasEnoughDataToSearch(input: {
     input.sku ||
       input.official_product_name ||
       input.common_nickname ||
-      (input.brand && input.model),
+      (input.brand && input.model)
   );
 }
 
@@ -80,7 +81,7 @@ export async function GET() {
   if (error) {
     return NextResponse.json(
       { success: false, error: "Failed to load grails." },
-      { status: 500 },
+      { status: 500 }
     );
   }
 
@@ -95,7 +96,7 @@ export async function POST(request: Request) {
     if (!nickname) {
       return NextResponse.json(
         { success: false, error: "Nickname is required." },
-        { status: 400 },
+        { status: 400 }
       );
     }
 
@@ -126,7 +127,7 @@ export async function POST(request: Request) {
       console.error("Failed to create grail:", error);
       return NextResponse.json(
         { success: false, error: "Failed to create grail." },
-        { status: 500 },
+        { status: 500 }
       );
     }
 
@@ -199,6 +200,8 @@ export async function POST(request: Request) {
       }
     }
 
+    revalidatePath("/grails");
+
     return NextResponse.json({
       success: true,
       grail: updatedGrail,
@@ -211,7 +214,7 @@ export async function POST(request: Request) {
         error:
           error instanceof Error ? error.message : "Failed to create grail.",
       },
-      { status: 500 },
+      { status: 500 }
     );
   }
 }

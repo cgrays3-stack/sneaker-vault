@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 
 export const runtime = "nodejs";
@@ -122,6 +123,8 @@ export async function PATCH(request: Request, context: RouteContext) {
       );
     }
 
+    revalidatePath("/collection");
+
     return NextResponse.json({ success: true, sneaker: data[0] });
   } catch (error) {
     console.error("PATCH sneaker error:", error);
@@ -214,6 +217,9 @@ export async function DELETE(_request: Request, context: RouteContext) {
         { status: 404 }
       );
     }
+
+    revalidatePath("/collection");
+    revalidatePath("/wear-log");
 
     return NextResponse.json({
       success: true,
