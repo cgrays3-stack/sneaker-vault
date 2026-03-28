@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 
 export const runtime = "nodejs";
@@ -55,6 +56,9 @@ export async function POST(request: Request) {
 
       throw error;
     }
+
+    revalidatePath("/wear-log");
+    revalidatePath("/collection");
 
     return NextResponse.json({
       success: true,

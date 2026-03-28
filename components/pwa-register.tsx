@@ -8,9 +8,9 @@ export default function PWARegister() {
 
     navigator.serviceWorker
       .getRegistrations()
-      .then((registrations) => {
-        return Promise.all(registrations.map((registration) => registration.unregister()));
-      })
+      .then((registrations) =>
+        Promise.all(registrations.map((registration) => registration.unregister()))
+      )
       .then(() => {
         console.log("All service workers unregistered.");
       })
